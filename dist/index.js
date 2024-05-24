@@ -29,9 +29,17 @@ var news = [
     },
 ];
 //First Endpoint
-app.get("/api/home", function (req, res) {
+app.get("/news", function (req, res) {
     res.json(news);
 });
 app.listen(port, function () {
     console.log("Servidor rodando em http://localhost:".concat(port));
+});
+//Second Endpoint
+app.get('/news/:id/content', function (req, res) {
+    var id = parseInt(req.params.id);
+    var article = news.find(function (item) { return item.id === id; });
+    if (!article)
+        return res.status(404).json({ mensagem: 'Notícia não encontrada' });
+    res.json({ content: article.content });
 });

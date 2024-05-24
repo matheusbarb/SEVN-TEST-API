@@ -38,10 +38,19 @@ let news: News[] = [
 ];
 
 //First Endpoint
-app.get("/api/home", (req: Request, res: Response) => {
+app.get("/news", (req: Request, res: Response) => {
   res.json(news);
 });
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
+});
+
+//Second Endpoint
+
+app.get('/news/:id/content', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const article = news.find(item => item.id === id);
+    if (!article) return res.status(404).json({ mensagem: 'Notícia não encontrada' });
+    res.json({ content: article.content });
 });
