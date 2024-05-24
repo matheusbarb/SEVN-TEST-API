@@ -33,12 +33,16 @@ app.get("/news", function (req, res) {
     res.json(news);
 });
 //Second Endpoint
-app.get("/news/:id/content", function (req, res) {
+app.get("/news/:id/:field", function (req, res) {
+    var _a;
     var id = parseInt(req.params.id);
+    var field = req.params.field;
     var article = news.find(function (item) { return item.id === id; });
     if (!article)
         return res.status(404).json({ mensagem: "Notícia não encontrada" });
-    res.json({ content: article.content });
+    if (!(field in article))
+        return res.status(400).json({ mensagem: "Campo inválido" });
+    res.json((_a = {}, _a[field] = article[field], _a));
 });
 // Third Endpoint
 app.get("/article", function (_, res) {

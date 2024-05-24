@@ -46,12 +46,13 @@ app.get("/news", (req: Request, res: Response) => {
 
 //Second Endpoint
 
-app.get("/news/:id/content", (req: Request, res: Response) => {
+app.get("/news/:id/:field", (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
+  const field = req.params.field as keyof News;
   const article = news.find((item) => item.id === id);
-  if (!article)
-    return res.status(404).json({ mensagem: "Notícia não encontrada" });
-  res.json({ content: article.content });
+  if (!article) return res.status(404).json({ mensagem: "Notícia não encontrada" });
+  if (!(field in article)) return res.status(400).json({ mensagem: "Campo inválido" });
+  res.json({ [field]: article[field] });
 });
 
 // Third Endpoint
